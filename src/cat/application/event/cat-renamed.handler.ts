@@ -11,7 +11,8 @@ import {
 @EventsHandler(CatRenamedEvent)
 export class CatRenamedHandler implements IEventHandler<CatRenamedEvent> {
     public constructor(
-        @Inject(INTEGRATION_EVENT_PUBLISHER) private readonly integrationEventPublisher: IntegrationEventPublisher,
+        @Inject(INTEGRATION_EVENT_PUBLISHER)
+        private readonly integrationEventPublisher: IntegrationEventPublisher,
     ) {}
 
     async handle(event: CatRenamedEvent) {

@@ -1,6 +1,6 @@
-import { IEvent } from "@nestjs/cqrs";
+import { DomainEvent } from "src/shared/domain";
 
-export class CatCreatedEvent implements IEvent {
+export class CatCreatedEvent implements DomainEvent {
     public constructor(
         public readonly id: number,
         public readonly name: string,

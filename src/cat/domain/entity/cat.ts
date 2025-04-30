@@ -1,8 +1,8 @@
-import { AggregateRoot } from "@nestjs/cqrs";
 import { CatRenamedEvent } from "../event/cat-renamed.event";
 import { UnprocessableEntityException } from "@nestjs/common";
 import { ErrorMessage } from "../error-message";
 import { CatCreatedEvent } from "../event/cat-created.event";
+import { DomainAggregateRoot } from "src/shared/domain";
 
 export type CatEssentialProperties = Readonly<
     Required<{
@@ -20,20 +20,7 @@ export type CatOptionalProperties = Readonly<
 
 export type CatProperties = CatEssentialProperties & Required<CatOptionalProperties>;
 
-export interface Cat {
-    get id(): number;
-    get name(): string;
-    get hairColor(): string;
-    get kind(): string | null;
-
-    set name(name: string);
-
-    persist(): void;
-    compareId(id: number): boolean;
-    commit(): void;
-}
-
-export class CatImpl extends AggregateRoot implements Cat {
+export class Cat extends DomainAggregateRoot<number, Cat> {
     private readonly _id: number;
     private _name: string;
     private readonly _hairColor: string;
@@ -41,8 +28,8 @@ export class CatImpl extends AggregateRoot implements Cat {
 
     constructor(properties: CatProperties) {
         const name = properties.name.trim();
-        CatImpl.ensureValidId(properties.id);
-        CatImpl.ensureValidName(name);
+        Cat.ensureValidId(properties.id);
+        Cat.ensureValidName(name);
 
         super();
         this._id = properties.id;
@@ -80,10 +67,6 @@ export class CatImpl extends AggregateRoot implements Cat {
 
     public persist(): void {
         this.apply(new CatCreatedEvent(this._id, this._name));
-    }
-
-    public compareId(id: number): boolean {
-        return this._id === id;
     }
 
     private static ensureValidId(id: number) {
