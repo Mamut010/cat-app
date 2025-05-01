@@ -8,7 +8,9 @@ export interface IntegrationEventHandlerOptions {
 
 export function IntegrationEventHandler(topic: string): MethodDecorator;
 export function IntegrationEventHandler(options: IntegrationEventHandlerOptions): MethodDecorator;
-export function IntegrationEventHandler(topicOrOptions: string | IntegrationEventHandlerOptions): MethodDecorator {
+export function IntegrationEventHandler(
+    topicOrOptions: string | IntegrationEventHandlerOptions,
+): MethodDecorator {
     return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
         const topic = typeof topicOrOptions === "string" ? topicOrOptions : topicOrOptions.topic;
         const className = getClassName(target);
@@ -16,9 +18,9 @@ export function IntegrationEventHandler(topicOrOptions: string | IntegrationEven
 
         let queue: string;
         if (typeof topicOrOptions === "string") {
-            queue = `${serviceName}.${topic}`;
+            queue = `${topic}:${serviceName}`;
         } else {
-            queue = topicOrOptions.queue ?? `${serviceName}.${topic}`;
+            queue = topicOrOptions.queue ?? `${topic}:${serviceName}`;
         }
 
         return RabbitSubscribe({
@@ -30,7 +32,9 @@ export function IntegrationEventHandler(topicOrOptions: string | IntegrationEven
 }
 
 function extractServiceName(className: string): string {
-    return className.replace(/(Integration)?(Controller|Listener|Handler)$/i, "").toLowerCase();
+    return className
+        .replace(/(Integration|IntegrationEvent)?(Controller|Listener|Handler|Service)$/i, "")
+        .toLowerCase();
 }
 
 function getClassName(target: unknown): string | undefined {
