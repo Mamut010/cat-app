@@ -8,9 +8,7 @@ function setupSwagger(app: INestApplication): void {
         .setTitle("Cat App")
         .setDescription("This is an application about cat, implemented with CQRS and DDD")
         .setVersion("1.0")
-        .addTag("cat")
-        .addTag("cqrs")
-        .addTag("ddd")
+        .addTag("Cat, CQRS, DDD")
         .addBasicAuth()
         .build();
 
