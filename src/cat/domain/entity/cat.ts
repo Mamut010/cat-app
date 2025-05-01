@@ -26,7 +26,7 @@ export class Cat extends DomainAggregateRoot<number, Cat> {
     private readonly _hairColor: string;
     private readonly _kind: string | null;
 
-    constructor(properties: CatProperties) {
+    constructor(properties: CatProperties, isNew: boolean = true) {
         const name = properties.name.trim();
         Cat.ensureValidId(properties.id);
         Cat.ensureValidName(name);
@@ -36,6 +36,10 @@ export class Cat extends DomainAggregateRoot<number, Cat> {
         this._name = name;
         this._hairColor = properties.hairColor.trim();
         this._kind = properties.kind?.trim() ?? null;
+
+        if (isNew) {
+            this.apply(new CatCreatedEvent(this._id, this._name));
+        }
     }
 
     get id(): number {
@@ -63,10 +67,6 @@ export class Cat extends DomainAggregateRoot<number, Cat> {
 
         this._name = name;
         this.apply(new CatRenamedEvent(this._id, oldName, name));
-    }
-
-    public persist(): void {
-        this.apply(new CatCreatedEvent(this._id, this._name));
     }
 
     private static ensureValidId(id: number) {

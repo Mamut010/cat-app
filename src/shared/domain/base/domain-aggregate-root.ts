@@ -6,9 +6,13 @@ export abstract class DomainAggregateRoot<
     TAggregate extends DomainAggregateRoot<TId, TAggregate>,
 > extends DomainEntity<TId, TAggregate> {
     private readonly domainEvents: DomainEvent[] = [];
+    public autoCommit: boolean = false;
 
     public apply(event: DomainEvent): void {
         this.domainEvents.push(event);
+        if (this.autoCommit) {
+            this.commit();
+        }
     }
 
     public pullEvents(): DomainEvent[] {

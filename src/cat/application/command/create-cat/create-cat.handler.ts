@@ -23,8 +23,6 @@ export class CreateCatHandler implements ICommandHandler<CreateCatCommand, Creat
             id: newId,
         });
 
-        cat.persist();
-
         await this.catRepo.save(cat);
 
         cat.commit();

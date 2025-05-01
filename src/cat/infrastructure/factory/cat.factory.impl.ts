@@ -8,12 +8,12 @@ export class CatFactoryImpl implements CatFactory {
     public constructor(@Inject(EventPublisher) private readonly eventPublisher: EventPublisher) {}
 
     create(options: CreateCatOptions): Cat {
-        const cat = new Cat({ ...options });
+        const cat = new Cat({ ...options }, true);
         return wrapAsNestAggregate(this.eventPublisher, cat);
     }
 
     reconstitute(properties: CatProperties): Cat {
-        const cat = new Cat({ ...properties });
+        const cat = new Cat({ ...properties }, false);
         return wrapAsNestAggregate(this.eventPublisher, cat);
     }
 }
