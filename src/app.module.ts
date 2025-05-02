@@ -4,9 +4,10 @@ import { AppService } from "./app.service";
 import { CatModule } from "./cat/cat.module";
 import { NotificationModule } from "./notification/notification.module";
 import { IntegrationModule } from "./shared/integration";
+import { ErrorModule } from "./shared/error";
 
 @Module({
-    imports: [IntegrationModule, CatModule, NotificationModule],
+    imports: [IntegrationModule, ErrorModule, CatModule, NotificationModule],
     controllers: [AppController],
     providers: [AppService],
 })

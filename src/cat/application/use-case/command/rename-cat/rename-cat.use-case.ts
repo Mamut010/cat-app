@@ -1,6 +1,6 @@
+import { NotFoundException } from "src/shared/error";
 import { RenameCatCommand } from "./rename-cat.command";
 import { RenameCatResult } from "./rename-cat.result";
-import { NotFoundException } from "@nestjs/common";
 import { CatRepository, DomainErrorMessage } from "src/cat/domain";
 import { CommandUseCase } from "src/shared/application";
 
