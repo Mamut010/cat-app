@@ -6,7 +6,9 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 function setupSwagger(app: INestApplication): void {
     const documentBuilder = new DocumentBuilder()
         .setTitle("Cat App")
-        .setDescription("This is an application about cat, implemented with CQRS and DDD")
+        .setDescription(
+            "This is an application about cat, implemented with CQRS and DDD following Clean Architecture",
+        )
         .setVersion("1.0")
         .addTag("Cat, CQRS, DDD")
         .addBasicAuth()

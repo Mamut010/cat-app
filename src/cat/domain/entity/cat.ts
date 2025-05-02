@@ -1,6 +1,6 @@
 import { CatRenamedEvent } from "../event/cat-renamed.event";
 import { UnprocessableEntityException } from "@nestjs/common";
-import { ErrorMessage } from "../error-message";
+import { DomainErrorMessage } from "../domain-error-message";
 import { CatCreatedEvent } from "../event/cat-created.event";
 import { DomainAggregateRoot } from "src/shared/domain";
 
@@ -71,13 +71,13 @@ export class Cat extends DomainAggregateRoot<number, Cat> {
 
     private static ensureValidId(id: number) {
         if (id <= 0) {
-            throw new UnprocessableEntityException(ErrorMessage.INVALID_CAT_ID);
+            throw new UnprocessableEntityException(DomainErrorMessage.INVALID_CAT_ID);
         }
     }
 
     private static ensureValidName(name: string) {
         if (name === "") {
-            throw new UnprocessableEntityException(ErrorMessage.CAT_NAME_EMPTY);
+            throw new UnprocessableEntityException(DomainErrorMessage.CAT_NAME_EMPTY);
         }
     }
 }
