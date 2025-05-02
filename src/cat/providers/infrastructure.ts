@@ -11,12 +11,9 @@ import {
     FindCatsUseCase,
     RenameCatCommand,
     RenameCatUseCase,
+    CatOperationHandler,
 } from "../application";
-import {
-    registerCommandHandlers,
-    registerEventHandlers,
-    registerQueryHandlers,
-} from "src/shared/application";
+import { HandlerProvider } from "src/shared/application";
 import { CatCreatedEvent, CatRenamedEvent } from "../domain";
 
 const injectionTokenProviders: Provider[] = [
@@ -35,14 +32,15 @@ const injectionTokenProviders: Provider[] = [
 ];
 
 const handlerProviders: Provider[] = [
-    ...registerCommandHandlers([
+    ...HandlerProvider.commands([
         [CreateCatCommand, CreateCatUseCase],
         [RenameCatCommand, RenameCatUseCase],
     ]),
-    ...registerQueryHandlers([[FindCatsQuery, FindCatsUseCase]]),
-    ...registerEventHandlers([
+    ...HandlerProvider.queries([[FindCatsQuery, FindCatsUseCase]]),
+    ...HandlerProvider.events([
         [CatCreatedEvent, CatCreatedHandler],
         [CatRenamedEvent, CatRenamedHandler],
+        [[CatCreatedEvent, CatRenamedEvent], CatOperationHandler],
     ]),
 ];
 

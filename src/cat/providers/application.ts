@@ -1,6 +1,7 @@
 import { Provider } from "@nestjs/common";
 import {
     CatCreatedHandler,
+    CatOperationHandler,
     CatRenamedHandler,
     CreateCatUseCase,
     FindCatsUseCase,
@@ -37,6 +38,10 @@ const useCaseProviders: Provider[] = [
         provide: CatRenamedHandler,
         useFactory: (publisher: IntegrationEventPublisher) => new CatRenamedHandler(publisher),
         inject: [INTEGRATION_EVENT_PUBLISHER],
+    },
+    {
+        provide: CatOperationHandler,
+        useFactory: () => new CatOperationHandler(),
     },
 ];
 

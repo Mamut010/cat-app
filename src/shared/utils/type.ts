@@ -1,3 +1,3 @@
 export type ValueOf<T> = T extends ReadonlyArray<unknown> ? T[number] : T[keyof T];
 
-export type Class<T = any> = new (...args: any[]) => T;
+export type Type<T = any> = new (...args: any[]) => T;

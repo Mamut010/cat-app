@@ -1,2 +1,2 @@
 export * from "./auto-handler";
-export * from "./register-handler";
+export * from "./handler-provider";
