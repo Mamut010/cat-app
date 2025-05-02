@@ -28,9 +28,10 @@ export function registerQueryHandler<
 }
 
 export function registerEventHandler<
-    TEvent extends DomainEvent = DomainEvent,
-    TEventHandler extends DomainEventHandler<TEvent> = DomainEventHandler<TEvent>,
->(event: Class<TEvent> | Class<TEvent>[], handler: Class<TEventHandler>): Provider {
+    TEvent extends DomainEvent,
+    TEventHandler extends DomainEventHandler<TEvent>,
+>(...args: Parameters<typeof AutoEventHandler<TEvent, TEventHandler>>): Provider {
+    const [event, handler] = args;
     return {
         provide: Symbol.for(handler.name),
         useClass: AutoEventHandler(event, handler),

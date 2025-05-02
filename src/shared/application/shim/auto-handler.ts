@@ -46,9 +46,9 @@ export function AutoQueryHandler<
 }
 
 export function AutoEventHandler<
-    TEvent extends DomainEvent = DomainEvent,
-    TEventHandler extends DomainEventHandler<TEvent> = DomainEventHandler<TEvent>,
->(event: Class<TEvent> | Class<TEvent>[], handler: Class<TEventHandler>): Class<IEventHandler<TEvent>> {
+    TEvent extends DomainEvent,
+    TEventHandler extends DomainEventHandler<TEvent>,
+>(event: Class<TEvent> | Class<DomainEvent>[], handler: Class<TEventHandler>): Class<IEventHandler<TEvent>> {
     @EventsHandler(...asArray(event))
     class Handler {
         constructor(@Inject(handler) private readonly handler: TEventHandler) {}
