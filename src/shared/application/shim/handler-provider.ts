@@ -40,16 +40,16 @@ export class HandlerProvider {
         };
     }
 
-    public static commands(pairs: [Type<Command>, Type<CommandUseCase<Command>>][]): Provider[] {
+    public static commands(...pairs: [Type<Command>, Type<CommandUseCase<Command>>][]): Provider[] {
         return pairs.map(([command, useCase]) => HandlerProvider.command(command, useCase));
     }
 
-    public static queries(pairs: [Type<Query>, Type<QueryUseCase<Query, QueryResult>>][]): Provider[] {
+    public static queries(...pairs: [Type<Query>, Type<QueryUseCase<Query, QueryResult>>][]): Provider[] {
         return pairs.map(([query, useCase]) => HandlerProvider.query(query, useCase));
     }
 
     public static events(
-        pairs: [Type<DomainEvent> | Type<DomainEvent>[], Type<DomainEventHandler<DomainEvent>>][],
+        ...pairs: [Type<DomainEvent> | Type<DomainEvent>[], Type<DomainEventHandler<DomainEvent>>][]
     ): Provider[] {
         return pairs.map(([event, handler]) => HandlerProvider.event(event, handler));
     }

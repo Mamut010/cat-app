@@ -32,16 +32,13 @@ const injectionTokenProviders: Provider[] = [
 ];
 
 const handlerProviders: Provider[] = [
-    ...HandlerProvider.commands([
-        [CreateCatCommand, CreateCatUseCase],
-        [RenameCatCommand, RenameCatUseCase],
-    ]),
-    ...HandlerProvider.queries([[FindCatsQuery, FindCatsUseCase]]),
-    ...HandlerProvider.events([
+    ...HandlerProvider.commands([CreateCatCommand, CreateCatUseCase], [RenameCatCommand, RenameCatUseCase]),
+    ...HandlerProvider.queries([FindCatsQuery, FindCatsUseCase]),
+    ...HandlerProvider.events(
         [CatCreatedEvent, CatCreatedHandler],
         [CatRenamedEvent, CatRenamedHandler],
         [[CatCreatedEvent, CatRenamedEvent], CatOperationHandler],
-    ]),
+    ),
 ];
 
 export const infrastructureProviders: Provider[] = [...injectionTokenProviders, ...handlerProviders];

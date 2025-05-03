@@ -2,7 +2,7 @@ import { Command } from "./command";
 import { Query } from "./query";
 import { QueryResult } from "./query-result";
 
-interface UseCase<TIn, TOut = void> {
+export interface UseCase<TIn, TOut = void> {
     execute(input: TIn): Promise<TOut>;
 }
 
