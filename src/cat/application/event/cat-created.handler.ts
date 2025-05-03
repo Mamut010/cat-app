@@ -1,5 +1,5 @@
 import { CatCreatedEvent } from "src/cat/domain";
-import { DomainEventHandler } from "src/shared/application/contract/domain-event-handler";
+import { DomainEventHandler } from "src/shared/cqrs";
 import { CatCreatedIntegrationEvent, IntegrationEventPublisher, Topic } from "src/shared/integration";
 
 export class CatCreatedHandler implements DomainEventHandler<CatCreatedEvent> {

@@ -1,5 +1,5 @@
 import { CatCreatedEvent, CatRenamedEvent } from "src/cat/domain";
-import { DomainEventHandler } from "src/shared/application/contract/domain-event-handler";
+import { DomainEventHandler } from "src/shared/cqrs";
 
 export class CatOperationHandler implements DomainEventHandler<CatCreatedEvent | CatRenamedEvent> {
     handle(event: CatCreatedEvent | CatRenamedEvent) {

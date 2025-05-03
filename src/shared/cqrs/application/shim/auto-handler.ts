@@ -9,7 +9,7 @@ import {
 import { Type } from "src/shared/utils/type";
 import { Command, CommandUseCase, Query, QueryResult, QueryUseCase } from "../contract";
 import { Inject } from "@nestjs/common";
-import { DomainEvent } from "src/shared/domain";
+import { DomainEvent } from "src/shared/cqrs";
 import { DomainEventHandler } from "../contract/domain-event-handler";
 import { asArray } from "src/shared/utils/array";
 

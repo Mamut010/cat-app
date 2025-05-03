@@ -1,7 +1,7 @@
 import { CatRenamedEvent } from "../event/cat-renamed.event";
 import { DomainErrorMessage } from "../domain-error-message";
 import { CatCreatedEvent } from "../event/cat-created.event";
-import { DomainAggregateRoot } from "src/shared/domain";
+import { DomainAggregateRoot } from "src/shared/cqrs";
 import { InvalidArgumentException } from "src/shared/error";
 
 export type CatEssentialProperties = Readonly<

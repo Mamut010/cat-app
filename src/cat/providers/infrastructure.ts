@@ -13,7 +13,7 @@ import {
     RenameCatUseCase,
     CatOperationHandler,
 } from "../application";
-import { HandlerProvider } from "src/shared/application";
+import { HandlerProvider } from "src/shared/cqrs";
 import { CatCreatedEvent, CatRenamedEvent } from "../domain";
 
 const injectionTokenProviders: Provider[] = [

@@ -1,9 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { CatController } from "./interface/cat.controller";
-import { CqrsModule } from "@nestjs/cqrs";
 import { LoggerMiddleware } from "src/shared/middleware";
 import { infrastructureProviders } from "./providers/infrastructure";
 import { applicationProviders } from "./providers/application";
+import { CqrsModule } from "src/shared/cqrs";
 
 @Module({
     imports: [CqrsModule],

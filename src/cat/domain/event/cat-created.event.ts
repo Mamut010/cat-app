@@ -1,4 +1,4 @@
-import { DomainEvent } from "src/shared/domain";
+import { DomainEvent } from "src/shared/cqrs";
 
 export class CatCreatedEvent implements DomainEvent {
     public constructor(

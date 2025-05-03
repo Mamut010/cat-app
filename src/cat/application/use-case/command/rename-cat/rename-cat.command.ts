@@ -1,4 +1,4 @@
-import { Command } from "src/shared/application";
+import { Command } from "src/shared/cqrs";
 
 export class RenameCatCommand implements Command {
     constructor(

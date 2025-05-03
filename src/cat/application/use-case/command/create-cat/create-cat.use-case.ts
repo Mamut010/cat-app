@@ -1,4 +1,4 @@
-import { CommandUseCase } from "src/shared/application";
+import { CommandUseCase } from "src/shared/cqrs";
 import { CreateCatCommand } from "./create-cat.command";
 import { CreateCatResult } from "./create-cat.result";
 import { CatFactory, CatRepository } from "src/cat/domain";

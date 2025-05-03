@@ -2,7 +2,7 @@ import { EventPublisher } from "@nestjs/cqrs";
 import { DomainAggregateRoot } from "../base";
 import { NestAggregateWrapper } from "./nest-aggregate-wrapper";
 
-export function wrapAsNestAggregate<TId, TAggregate extends DomainAggregateRoot<TId, TAggregate>>(
+export function mergeNestEventPublisher<TId, TAggregate extends DomainAggregateRoot<TId, TAggregate>>(
     eventPublisher: EventPublisher,
     domainAggregate: TAggregate,
 ): TAggregate {

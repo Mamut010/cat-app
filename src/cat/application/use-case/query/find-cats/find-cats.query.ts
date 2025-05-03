@@ -1,4 +1,4 @@
-import { Query } from "src/shared/application";
+import { Query } from "src/shared/cqrs";
 
 export class FindCatsQuery implements Query {
     public constructor(
