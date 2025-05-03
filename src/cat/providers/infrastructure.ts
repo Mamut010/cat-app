@@ -2,19 +2,6 @@ import { Provider } from "@nestjs/common";
 import { InjectionToken } from "../injection-token";
 import { CatFactoryImpl, CatRepositoryImpl } from "../infrastructure/domain";
 import { InMemoryCatModelRepository } from "../infrastructure/persistence";
-import {
-    CatCreatedHandler,
-    CatRenamedHandler,
-    CreateCatCommand,
-    CreateCatUseCase,
-    FindCatsQuery,
-    FindCatsUseCase,
-    RenameCatCommand,
-    RenameCatUseCase,
-    CatOperationHandler,
-} from "../application";
-import { HandlerProvider } from "src/shared/cqrs";
-import { CatCreatedEvent, CatRenamedEvent } from "../domain";
 
 const injectionTokenProviders: Provider[] = [
     {
@@ -31,14 +18,4 @@ const injectionTokenProviders: Provider[] = [
     },
 ];
 
-const handlerProviders: Provider[] = [
-    ...HandlerProvider.commands([CreateCatCommand, CreateCatUseCase], [RenameCatCommand, RenameCatUseCase]),
-    ...HandlerProvider.queries([FindCatsQuery, FindCatsUseCase]),
-    ...HandlerProvider.events(
-        [CatCreatedEvent, CatCreatedHandler],
-        [CatRenamedEvent, CatRenamedHandler],
-        [[CatCreatedEvent, CatRenamedEvent], CatOperationHandler],
-    ),
-];
-
-export const infrastructureProviders: Provider[] = [...injectionTokenProviders, ...handlerProviders];
+export const infrastructureProviders: Provider[] = injectionTokenProviders;

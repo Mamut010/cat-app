@@ -1,7 +1,8 @@
 import { CatRenamedEvent } from "src/cat/domain";
-import { DomainEventHandler } from "src/shared/cqrs";
+import { DomainEventHandler, RegisterDomainEventsHandler } from "src/shared/cqrs";
 import { CatRenamedIntegrationEvent, IntegrationEventPublisher, Topic } from "src/shared/integration";
 
+@RegisterDomainEventsHandler(CatRenamedEvent)
 export class CatRenamedHandler implements DomainEventHandler<CatRenamedEvent> {
     public constructor(private readonly integrationEventPublisher: IntegrationEventPublisher) {}
 

@@ -5,6 +5,7 @@ import { AutoHandler } from "./auto-handler";
 import { DomainEvent } from "src/shared/cqrs";
 import { DomainEventHandler } from "../contract/domain-event-handler";
 import { ICommandHandler, IEventHandler, IQueryHandler } from "@nestjs/cqrs";
+import { MetadataKey } from "../metadata-key";
 
 export class HandlerProvider {
     private constructor() {}
@@ -41,21 +42,36 @@ export class HandlerProvider {
         };
     }
 
-    public static commands(
-        ...pairs: [Type<Command>, Type<CommandUseCase<Command>>][]
-    ): ClassProvider<ICommandHandler>[] {
-        return pairs.map(([command, useCase]) => HandlerProvider.command(command, useCase));
+    public static fromDecorated(
+        ...targets: (
+            | Type<CommandUseCase<Command>>
+            | Type<QueryUseCase<Query, QueryResult>>
+            | Type<DomainEventHandler<DomainEvent>>
+        )[]
+    ): ClassProvider[] {
+        return targets
+            .flatMap((target) => [
+                HandlerProvider.getCommandHandlerProvider(target),
+                HandlerProvider.getQueryHandlerProvider(target),
+                HandlerProvider.getEventsHandlerProvider(target),
+            ])
+            .filter((provider) => provider !== null);
     }
 
-    public static queries(
-        ...pairs: [Type<Query>, Type<QueryUseCase<Query, QueryResult>>][]
-    ): ClassProvider<IQueryHandler>[] {
-        return pairs.map(([query, useCase]) => HandlerProvider.query(query, useCase));
+    private static getCommandHandlerProvider(target: Type): ClassProvider | null {
+        const command = Reflect.getMetadata(MetadataKey.COMMAND_USE_CASE, target) as Type<Command> | null;
+        return command ? HandlerProvider.command(command, target) : null;
     }
 
-    public static events(
-        ...pairs: [Type<DomainEvent> | Type<DomainEvent>[], Type<DomainEventHandler<DomainEvent>>][]
-    ): ClassProvider<IEventHandler>[] {
-        return pairs.map(([event, handler]) => HandlerProvider.event(event, handler));
+    private static getQueryHandlerProvider(target: Type): ClassProvider | null {
+        const query = Reflect.getMetadata(MetadataKey.QUERY_USE_CASE, target) as Type<Query> | null;
+        return query ? HandlerProvider.query(query, target) : null;
+    }
+
+    private static getEventsHandlerProvider(target: Type): ClassProvider | null {
+        const events = Reflect.getMetadata(MetadataKey.DOMAIN_EVENTS_HANDLER, target) as
+            | Type<DomainEvent>[]
+            | null;
+        return events ? HandlerProvider.event(events, target) : null;
     }
 }

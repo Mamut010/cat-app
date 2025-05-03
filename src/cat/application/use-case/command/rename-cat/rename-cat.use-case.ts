@@ -2,8 +2,9 @@ import { NotFoundException } from "src/shared/error";
 import { RenameCatCommand } from "./rename-cat.command";
 import { RenameCatResult } from "./rename-cat.result";
 import { CatRepository, DomainErrorMessage } from "src/cat/domain";
-import { CommandUseCase } from "src/shared/cqrs";
+import { CommandUseCase, RegisterCommandUseCase } from "src/shared/cqrs";
 
+@RegisterCommandUseCase(RenameCatCommand)
 export class RenameCatUseCase implements CommandUseCase<RenameCatCommand, RenameCatResult> {
     public constructor(private readonly catRepo: CatRepository) {}
 
