@@ -1,0 +1,1 @@
+export const DOMAIN_AGGREGATE_MERGER = Symbol.for("DOMAIN_AGGREGATE_MERGER");
