@@ -1,4 +1,4 @@
-import { IntegrationEvent } from "../integration-event";
+import { IntegrationEvent } from "../contract/integration-event";
 
 export class CatRenamedIntegrationEvent implements IntegrationEvent {
     public constructor(

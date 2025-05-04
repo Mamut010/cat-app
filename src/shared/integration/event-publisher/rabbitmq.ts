@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { IntegrationEventPublisher } from "../integration-event-publisher";
+import { IntegrationEventPublisher } from "../contract/integration-event-publisher";
 import { AmqpConnection } from "@golevelup/nestjs-rabbitmq";
-import { IntegrationEvent } from "../integration-event";
+import { IntegrationEvent } from "../contract/integration-event";
 import { IntegrationConfig } from "../config";
 
 @Injectable()

@@ -1,5 +1,6 @@
 import { RabbitSubscribe } from "@golevelup/nestjs-rabbitmq";
-import { IntegrationConfig } from "./config";
+import { IntegrationConfig } from "../config";
+import { getClassName } from "src/shared/utils/class";
 
 export interface IntegrationEventHandlerOptions {
     topic: string;
@@ -35,15 +36,4 @@ function extractServiceName(className: string): string {
     return className
         .replace(/(Integration|IntegrationEvent)?(Controller|Listener|Handler|Service)$/i, "")
         .toLowerCase();
-}
-
-function getClassName(target: unknown): string | undefined {
-    if (typeof target !== "object" || target === null) {
-        return undefined;
-    }
-    if (Object.hasOwn(target, "constructor")) {
-        return target.constructor.name;
-    } else {
-        return undefined;
-    }
 }
