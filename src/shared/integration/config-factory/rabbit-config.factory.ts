@@ -10,6 +10,23 @@ export class RabbitConfigFactory {
 
     public create(): RabbitMQConfig {
         this.initRabbitSubscribe();
+        return this.getConfig();
+    }
+
+    private initRabbitSubscribe(): void {
+        this.explorer.getIntegrationEventHandlerMetadata().forEach(({ target, metadata }) => {
+            recordKeys(metadata).forEach((propertyKey) => {
+                const { descriptor, queue, topic } = metadata[propertyKey];
+                RabbitSubscribe({
+                    exchange: IntegrationConfig.INTEGRATION_EVENT_EXCHANGE,
+                    routingKey: topic,
+                    queue,
+                })(target, propertyKey, descriptor);
+            });
+        });
+    }
+
+    private getConfig(): RabbitMQConfig {
         return {
             exchanges: [
                 {
@@ -23,18 +40,5 @@ export class RabbitConfigFactory {
             },
             enableControllerDiscovery: true,
         };
-    }
-
-    private initRabbitSubscribe() {
-        for (const { target, metadata } of this.explorer.getIntegrationEventHandlerMetadata()) {
-            for (const propertyKey of recordKeys(metadata)) {
-                const { descriptor, queue, topic } = metadata[propertyKey];
-                RabbitSubscribe({
-                    exchange: IntegrationConfig.INTEGRATION_EVENT_EXCHANGE,
-                    routingKey: topic,
-                    queue,
-                })(target, propertyKey, descriptor);
-            }
-        }
     }
 }

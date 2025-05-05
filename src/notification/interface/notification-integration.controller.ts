@@ -1,4 +1,4 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Logger } from "@nestjs/common";
 import {
     CatCreatedIntegrationEvent,
     CatRenamedIntegrationEvent,
@@ -8,13 +8,20 @@ import {
 
 @Controller()
 export class NotificationIntegrationController {
+    private readonly log = new Logger("Notification");
+
     @IntegrationEventHandler(Topic.CAT_CREATED)
     sendCatCreatedNotification(event: CatCreatedIntegrationEvent) {
-        console.log(`A cat named '${event.name}' with id <${event.id}> has been created`);
+        this.log.log(`A cat named '${event.name}' with id <${event.id}> has been created`);
     }
 
     @IntegrationEventHandler(Topic.CAT_RENAMED)
     sendCatRenamedNotification(event: CatRenamedIntegrationEvent) {
-        console.log(`Cat <${event.id}> has been renamed from '${event.oldName}' to '${event.newName}'`);
+        this.log.log(`Cat <${event.id}> has been renamed from '${event.oldName}' to '${event.newName}'`);
+    }
+
+    @IntegrationEventHandler(Topic.CAT_CREATED)
+    sendCatOperationNotification(event: CatCreatedIntegrationEvent | CatRenamedIntegrationEvent) {
+        this.log.log(`An operation has been applied on cat with id <${event.id}>`);
     }
 }

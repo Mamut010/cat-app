@@ -17,12 +17,8 @@ export function IntegrationEventHandler(
         const className = getClassName(target);
         const serviceName = className ? extractServiceName(className) : "default";
 
-        let queue: string;
-        if (typeof topicOrOptions === "string") {
-            queue = `${topic}:${serviceName}`;
-        } else {
-            queue = topicOrOptions.queue ?? `${topic}:${serviceName}`;
-        }
+        let queue = typeof topicOrOptions === "object" ? topicOrOptions.queue : undefined;
+        queue ??= `${topic}:${serviceName}_${propertyKey.toString()}`;
 
         const metadata = getIntegrationEventHandlerMetadata(target);
         metadata[propertyKey] = { descriptor, queue, topic };
