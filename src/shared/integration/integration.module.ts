@@ -1,32 +1,26 @@
 import { RabbitMQModule } from "@golevelup/nestjs-rabbitmq";
 import { Global, Module } from "@nestjs/common";
-import { IntegrationConfig } from "./config";
-import { RabbitMqIntegrationEventPublisher } from "./event-publisher";
+import { RabbitMqIntegrationEventPublisher } from "./event-publisher/rabbitmq";
 import { INTEGRATION_EVENT_PUBLISHER } from "./injection-token";
+import { DiscoveryModule } from "@nestjs/core";
+import { RabbitConfigFactory } from "./config-factory/rabbit-config.factory";
+import { IntegrationEventHandlerExplorer } from "./support/integration-event-handler-explorer";
 
 @Global()
 @Module({
     imports: [
-        RabbitMQModule.forRoot({
-            exchanges: [
-                {
-                    name: IntegrationConfig.INTEGRATION_EVENT_EXCHANGE,
-                    type: "topic",
-                },
-            ],
-            uri: IntegrationConfig.URI,
-            connectionInitOptions: {
-                wait: false,
-            },
-            enableControllerDiscovery: true,
+        DiscoveryModule,
+        RabbitMQModule.forRootAsync({
+            useClass: RabbitConfigFactory,
         }),
     ],
     providers: [
+        IntegrationEventHandlerExplorer,
         {
             provide: INTEGRATION_EVENT_PUBLISHER,
             useClass: RabbitMqIntegrationEventPublisher,
         },
     ],
-    exports: [INTEGRATION_EVENT_PUBLISHER],
+    exports: [IntegrationEventHandlerExplorer, INTEGRATION_EVENT_PUBLISHER],
 })
 export class IntegrationModule {}

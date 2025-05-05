@@ -1,6 +1,6 @@
-import { RabbitSubscribe } from "@golevelup/nestjs-rabbitmq";
-import { IntegrationConfig } from "../config";
 import { getClassName } from "src/shared/utils/class";
+import { METADATA_KEY } from "../metadata-key";
+import { IntegrationEventHandlerMetadata } from "../type";
 
 export interface IntegrationEventHandlerOptions {
     topic: string;
@@ -12,7 +12,7 @@ export function IntegrationEventHandler(options: IntegrationEventHandlerOptions)
 export function IntegrationEventHandler(
     topicOrOptions: string | IntegrationEventHandlerOptions,
 ): MethodDecorator {
-    return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
         const topic = typeof topicOrOptions === "string" ? topicOrOptions : topicOrOptions.topic;
         const className = getClassName(target);
         const serviceName = className ? extractServiceName(className) : "default";
@@ -24,11 +24,10 @@ export function IntegrationEventHandler(
             queue = topicOrOptions.queue ?? `${topic}:${serviceName}`;
         }
 
-        return RabbitSubscribe({
-            exchange: IntegrationConfig.INTEGRATION_EVENT_EXCHANGE,
-            routingKey: topic,
-            queue,
-        })(target, propertyKey, descriptor);
+        const metadata = getIntegrationEventHandlerMetadata(target);
+        metadata[propertyKey] = { descriptor, queue, topic };
+
+        Reflect.defineMetadata(METADATA_KEY.INTEGRATION_EVENT_HANDLER, metadata, target);
     };
 }
 
@@ -36,4 +35,11 @@ function extractServiceName(className: string): string {
     return className
         .replace(/(Integration|IntegrationEvent)?(Controller|Listener|Handler|Service)$/i, "")
         .toLowerCase();
+}
+
+function getIntegrationEventHandlerMetadata(target: object) {
+    const metadata = Reflect.getMetadata(METADATA_KEY.INTEGRATION_EVENT_HANDLER, target) as
+        | IntegrationEventHandlerMetadata
+        | undefined;
+    return metadata ?? {};
 }
