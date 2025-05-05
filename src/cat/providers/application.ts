@@ -1,4 +1,4 @@
-import { Provider } from "@nestjs/common";
+import { FactoryProvider } from "@nestjs/common";
 import {
     CatCreatedHandler,
     CatOperationHandler,
@@ -10,8 +10,10 @@ import {
 import { CatFactory, CatRepository } from "../domain";
 import { InjectionToken } from "../injection-token";
 import { INTEGRATION_EVENT_PUBLISHER, IntegrationEventPublisher } from "src/shared/integration";
+import { HandlerProvider } from "src/shared/cqrs";
+import { Type } from "src/shared/utils/type";
 
-const useCaseProviders: Provider[] = [
+const useCaseProviders: FactoryProvider[] = [
     {
         provide: CreateCatUseCase,
         useFactory: (factory: CatFactory, repo: CatRepository) => {
@@ -29,6 +31,9 @@ const useCaseProviders: Provider[] = [
         useFactory: (repo: CatRepository) => new FindCatsUseCase(repo),
         inject: [InjectionToken.CAT_REPOSITORY],
     },
+];
+
+const domainEventsHandlerProviders: FactoryProvider[] = [
     {
         provide: CatCreatedHandler,
         useFactory: (publisher: IntegrationEventPublisher) => new CatCreatedHandler(publisher),
@@ -45,4 +50,13 @@ const useCaseProviders: Provider[] = [
     },
 ];
 
-export const applicationProviders: Provider[] = useCaseProviders;
+const autoHandlerProviders = HandlerProvider.fromDecorated(
+    ...useCaseProviders.map((provider) => provider.provide as Type),
+    ...domainEventsHandlerProviders.map((provider) => provider.provide as Type),
+);
+
+export const applicationProviders = [
+    ...useCaseProviders,
+    ...domainEventsHandlerProviders,
+    ...autoHandlerProviders,
+];

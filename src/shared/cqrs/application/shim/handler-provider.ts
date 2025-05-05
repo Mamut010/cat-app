@@ -42,13 +42,7 @@ export class HandlerProvider {
         };
     }
 
-    public static fromDecorated(
-        ...targets: (
-            | Type<CommandUseCase<Command>>
-            | Type<QueryUseCase<Query, QueryResult>>
-            | Type<DomainEventHandler<DomainEvent>>
-        )[]
-    ): ClassProvider[] {
+    public static fromDecorated(...targets: Type[]): ClassProvider[] {
         return targets
             .flatMap((target) => [
                 HandlerProvider.getCommandHandlerProvider(target),

@@ -18,4 +18,4 @@ const injectionTokenProviders: Provider[] = [
     },
 ];
 
-export const infrastructureProviders: Provider[] = injectionTokenProviders;
+export const infrastructureProviders = injectionTokenProviders;

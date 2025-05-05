@@ -4,12 +4,11 @@ import { LoggerMiddleware } from "src/shared/middleware";
 import { infrastructureProviders } from "./providers/infrastructure";
 import { applicationProviders } from "./providers/application";
 import { CqrsModule } from "src/shared/cqrs";
-import { handlerProviders } from "./providers/handler";
 
 @Module({
     imports: [CqrsModule],
     controllers: [CatController],
-    providers: [...infrastructureProviders, ...applicationProviders, ...handlerProviders],
+    providers: [...infrastructureProviders, ...applicationProviders],
 })
 export class CatModule implements NestModule {
     configure(consumer: MiddlewareConsumer): Promise<void> {
