@@ -14,6 +14,7 @@ import {
     FindCatsQuery,
     FindCatsResult,
 } from "../application";
+import { ApiOperation } from "@nestjs/swagger";
 
 @Controller("cat")
 export class CatController {
@@ -23,6 +24,7 @@ export class CatController {
     ) {}
 
     @Get()
+    @ApiOperation({ summary: "Query all cats" })
     public async findAll(@Query() qs: FindCatsRequestQsDto): Promise<FindCatsResponseDto> {
         const query = new FindCatsQuery(qs.skip, qs.take);
         const result = await this.queryBus.execute<FindCatsQuery, FindCatsResult>(query);
@@ -30,6 +32,7 @@ export class CatController {
     }
 
     @Post()
+    @ApiOperation({ summary: "Create a new cat" })
     public async create(@Body() body: CreateCatRequestDto): Promise<CreateCatResponseDto> {
         const command = new CreateCatCommand(body.name, body.hairColor, body.kind);
         const result = await this.commandBus.execute<CreateCatCommand, CreateCatResult>(command);
@@ -37,6 +40,7 @@ export class CatController {
     }
 
     @Post(":id/rename")
+    @ApiOperation({ summary: "Rename a cat" })
     public async rename(
         @Param("id") id: number,
         @Body() body: RenameCatRequestDto,
