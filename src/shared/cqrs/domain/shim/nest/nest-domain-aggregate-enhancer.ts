@@ -1,15 +1,16 @@
 import { EventPublisher } from "@nestjs/cqrs";
-import { DomainAggregateRoot } from "../base";
+import { DomainAggregateRoot } from "../../base";
 import { NestAggregateAdaptor } from "./nest-aggregate-adaptor";
-import { DomainAggregateMerger } from "../contract/domain-aggregate-merger";
+import { DomainAggregateEnhancer } from "../../contract";
 
-export class DomainAggregateMergerImpl implements DomainAggregateMerger {
-    public mergeNestEventPublisher<TId, TAggregate extends DomainAggregateRoot<TId, TAggregate>>(
-        eventPublisher: EventPublisher,
+export class NestDomainAggregateEnhancer implements DomainAggregateEnhancer {
+    public constructor(private readonly eventPublisher: EventPublisher) {}
+
+    public enableEventPublishing<TId, TAggregate extends DomainAggregateRoot<TId, TAggregate>>(
         domainAggregate: TAggregate,
     ): TAggregate {
         let nestAdaptor = new NestAggregateAdaptor(domainAggregate);
-        nestAdaptor = eventPublisher.mergeObjectContext(nestAdaptor);
+        nestAdaptor = this.eventPublisher.mergeObjectContext(nestAdaptor);
         domainAggregate = nestAdaptor.instance;
         return new Proxy(domainAggregate, {
             get(target, prop, receiver) {

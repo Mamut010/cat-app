@@ -1,11 +1,17 @@
 import { Type } from "src/shared/utils/type";
-import { Command, CommandUseCase, Query, QueryResult, QueryUseCase } from "../contract";
+import {
+    Command,
+    CommandUseCase,
+    DomainEventHandler,
+    Query,
+    QueryResult,
+    QueryUseCase,
+} from "../../contract";
 import { ClassProvider } from "@nestjs/common";
 import { AutoHandler } from "./auto-handler";
 import { DomainEvent } from "src/shared/cqrs";
-import { DomainEventHandler } from "../contract/domain-event-handler";
 import { ICommandHandler, IEventHandler, IQueryHandler } from "@nestjs/cqrs";
-import { MetadataKey } from "../metadata-key";
+import { MetadataKey } from "../../metadata-key";
 
 export class HandlerProvider {
     private constructor() {}

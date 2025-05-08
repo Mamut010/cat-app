@@ -8,7 +8,7 @@ export abstract class DomainAggregateRoot<
     private readonly domainEvents: DomainEvent[] = [];
     public autoCommit: boolean = false;
 
-    public apply(event: DomainEvent): void {
+    protected apply(event: DomainEvent): void {
         this.domainEvents.push(event);
         if (this.autoCommit) {
             this.commit();

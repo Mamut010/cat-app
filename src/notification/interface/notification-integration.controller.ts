@@ -19,9 +19,4 @@ export class NotificationIntegrationController {
     sendCatRenamedNotification(event: CatRenamedIntegrationEvent) {
         this.log.log(`Cat <${event.id}> has been renamed from '${event.oldName}' to '${event.newName}'`);
     }
-
-    @IntegrationEventHandler(Topic.CAT_CREATED)
-    sendCatOperationNotification(event: CatCreatedIntegrationEvent | CatRenamedIntegrationEvent) {
-        this.log.log(`An operation has been applied on cat with id <${event.id}>`);
-    }
 }

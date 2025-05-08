@@ -1,5 +1,5 @@
 import { AggregateRoot as NestAggregateRoot } from "@nestjs/cqrs";
-import { DomainAggregateRoot } from "../base";
+import { DomainAggregateRoot } from "../../base";
 
 export class NestAggregateAdaptor<
     TId,
